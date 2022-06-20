@@ -1,5 +1,5 @@
-query CarListQuery {
-    carList {
+query CarListQuery($size: Int) {
+    carList(size: $size) {
         id
         naming {
             ...CarListNamingFragment
