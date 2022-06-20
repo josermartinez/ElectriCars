@@ -1,0 +1,9 @@
+fragment CarImageFragment on CarImage {
+    id
+    url
+    height
+    width
+    thumbnail_url
+    thumbnail_height
+    thumbnail_width
+}

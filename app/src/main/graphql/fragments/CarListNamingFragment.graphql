@@ -1,0 +1,7 @@
+fragment CarListNamingFragment on CarListNaming {
+    make
+    model
+    version
+    edition
+    chargetrip_version
+}

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ElectriCars</string>
+    <string name="car_make_label">Make\n%s</string>
+    <string name="car_model_label">Model\n%s</string>
+    <string name="car_version_label">Version\n%s</string>
+    <string name="car_edition_label">Edition\n%s</string>
+    <string name="car_charge_trip_label">Charge trip version\n%s</string>
+</resources>

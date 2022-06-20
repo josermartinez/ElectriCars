@@ -1,0 +1,16 @@
+query CarListQuery {
+    carList {
+        id
+        naming {
+            ...CarListNamingFragment
+        }
+        media {
+            image {
+                ...CarImageFragment
+            }
+            brand {
+                ...CarImageFragment
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+query CarQuery($carId: ID!) {
+    car(id: $carId) {
+        id
+        naming {
+            ...CarNamingFragment
+        }
+        media {
+            image {
+                ...CarImageFragment
+            }
+            brand {
+                ...CarImageFragment
+            }
+        }
+    }
+}

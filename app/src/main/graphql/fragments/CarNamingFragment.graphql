@@ -1,0 +1,7 @@
+fragment CarNamingFragment on CarNaming {
+    make
+    model
+    version
+    edition
+    chargetrip_version
+}
