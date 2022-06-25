@@ -1,0 +1,8 @@
+fragment OCPIHoursFragment on OCPIHours {
+    twentyfourseven,
+    regular_hours {
+        weekday
+        period_begin
+        period_end
+    }
+}

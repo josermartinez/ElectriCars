@@ -1,0 +1,20 @@
+fragment StationFragment on Station {
+    id
+    review {
+        ...ReviewFragment
+    }
+    name
+    address
+    city
+    state
+    country
+    coordinates {
+        ...GeoLocationFragment
+    }
+    opening_times {
+        ...OCPIHoursFragment
+    }
+    images {
+        ...OCPIImageFragment
+    }
+}

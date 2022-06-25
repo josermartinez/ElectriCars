@@ -1,0 +1,4 @@
+fragment GeoLocationFragment on OCPIGeoLocation {
+    latitude
+    longitude
+}

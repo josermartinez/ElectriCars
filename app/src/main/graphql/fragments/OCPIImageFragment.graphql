@@ -1,0 +1,4 @@
+fragment OCPIImageFragment on OCPIImage {
+    url
+    thumbnail
+}

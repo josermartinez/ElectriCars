@@ -1,0 +1,5 @@
+query StationQuery($id: ID!) {
+    station(id: $id) {
+        ...StationFragment
+    }
+}

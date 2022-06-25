@@ -1,0 +1,4 @@
+fragment ReviewFragment on ReviewStats {
+    rating
+    count
+}
