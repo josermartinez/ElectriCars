@@ -1,4 +1,4 @@
-package com.zemoga.electricars.domain.model
+package com.zemoga.electricars.domain.model.car
 
 import com.zemoga.electricars.fragment.CarImageFragment
 

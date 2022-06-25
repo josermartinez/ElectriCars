@@ -7,10 +7,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ElectricCar
+import androidx.compose.material.icons.filled.EvStation
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -19,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.zemoga.electricars.presentation.car_details.CarDetailsScreen
 import com.zemoga.electricars.presentation.car_listing.CarListScreen
+import com.zemoga.electricars.presentation.station_listing.StationListingScreen
 import com.zemoga.electricars.ui.theme.ElectriCarsTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,15 +48,35 @@ fun MainScreen(modifier: Modifier = Modifier) {
         showNavigationIcon = controller.previousBackStackEntry != null
     }
 
-    Scaffold(modifier = modifier, topBar = {
-        MainTopAppBar(
-            title = stringResource(id = R.string.app_name),
-            showNavigationIcon = showNavigationIcon,
-            onBackIconClicked = {
-                navController.navigateUp()
+    Scaffold(modifier = modifier,
+        topBar = {
+            MainTopAppBar(
+                title = stringResource(id = R.string.app_name),
+                showNavigationIcon = showNavigationIcon,
+                onBackIconClicked = {
+                    navController.navigateUp()
+                }
+            )
+        },
+        bottomBar = {
+            var selectedScreen by rememberSaveable {
+                mutableStateOf(ElectriCarScreens.CAR_LISTING)
             }
-        )
-    }) { padding ->
+
+            ElectriCarsBottomNavigation(selectedScreen = selectedScreen,
+                onClick = {
+                    when (it) {
+                        ElectriCarScreens.CAR_LISTING -> {
+                            navController.navigate("${ElectriCarScreens.CAR_LISTING}")
+                            selectedScreen = ElectriCarScreens.CAR_LISTING
+                        }
+                        ElectriCarScreens.STATION_LISTING -> {
+                            navController.navigate("${ElectriCarScreens.STATION_LISTING}")
+                            selectedScreen = ElectriCarScreens.STATION_LISTING
+                        }
+                    }
+                })
+        }) { padding ->
         ElectriCarsNavHost(Modifier.padding(padding), navController)
     }
 }
@@ -74,6 +99,9 @@ fun ElectriCarsNavHost(modifier: Modifier = Modifier, navController: NavHostCont
         ) { entry ->
             val carId = entry.arguments?.getString("carId").orEmpty()
             CarDetailsScreen(carId = carId)
+        }
+        composable(route = ElectriCarScreens.STATION_LISTING.name) {
+            StationListingScreen()
         }
     }
 }
@@ -102,3 +130,48 @@ fun MainTopAppBar(
         }
     )
 }
+
+@Composable
+fun ElectriCarsBottomNavigation(
+    modifier: Modifier = Modifier,
+    selectedScreen: ElectriCarScreens = ElectriCarScreens.CAR_LISTING,
+    onClick: (ElectriCarScreens) -> Unit = {}
+) {
+    BottomNavigation(modifier = modifier) {
+        BottomNavigationItem(
+            selected = selectedScreen == ElectriCarScreens.CAR_LISTING,
+            onClick = { onClick(ElectriCarScreens.CAR_LISTING) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.ElectricCar,
+                    contentDescription = null
+                )
+            },
+            label = {
+                Text(
+                    text = stringResource(id = R.string.bottom_navigation_electric_cars_label)
+                )
+            })
+
+        BottomNavigationItem(
+            selected = selectedScreen == ElectriCarScreens.STATION_LISTING,
+            onClick = { onClick(ElectriCarScreens.STATION_LISTING) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.EvStation,
+                    contentDescription = null
+                )
+            }, label = {
+                Text(
+                    text = stringResource(id = R.string.bottom_navigation_stations_label)
+                )
+            })
+    }
+}
+
+@Preview
+@Composable
+fun ElectriCarsBottomNavigationPreview() {
+    ElectriCarsBottomNavigation()
+}
+

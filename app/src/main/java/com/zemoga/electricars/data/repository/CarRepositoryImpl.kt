@@ -1,8 +1,8 @@
 package com.zemoga.electricars.data.repository
 
 import com.zemoga.electricars.data.remote.source.CarRemoteDataSource
-import com.zemoga.electricars.domain.model.Car
-import com.zemoga.electricars.domain.model.toCar
+import com.zemoga.electricars.domain.model.car.Car
+import com.zemoga.electricars.domain.model.car.toCar
 import com.zemoga.electricars.domain.repository.CarRepository
 import com.zemoga.electricars.util.Resource
 import kotlinx.coroutines.flow.Flow

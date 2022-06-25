@@ -1,8 +1,9 @@
 package com.zemoga.electricars.di
 
 import com.apollographql.apollo3.ApolloClient
-import com.zemoga.electricars.data.remote.source.CarRemoteDataSource
 import com.zemoga.electricars.data.remote.interceptor.AuthorizationInterceptor
+import com.zemoga.electricars.data.remote.source.CarRemoteDataSource
+import com.zemoga.electricars.data.remote.source.StationRemoteDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,7 +32,13 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun providesCarSource(apolloClient: ApolloClient): CarRemoteDataSource {
+    fun providesCarRemoteDataSource(apolloClient: ApolloClient): CarRemoteDataSource {
         return CarRemoteDataSource(apolloClient)
+    }
+
+    @Provides
+    @Singleton
+    fun providesStationRemoteDataSource(apolloClient: ApolloClient): StationRemoteDataSource {
+        return StationRemoteDataSource(apolloClient)
     }
 }

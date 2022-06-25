@@ -5,4 +5,7 @@
     <string name="car_version_label">Version\n%s</string>
     <string name="car_edition_label">Edition\n%s</string>
     <string name="car_charge_trip_label">Charge trip version\n%s</string>
+
+    <string name="bottom_navigation_electric_cars_label">Electric cars</string>
+    <string name="bottom_navigation_stations_label">Stations</string>
 </resources>

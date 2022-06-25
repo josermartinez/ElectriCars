@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.zemoga.electricars.R
-import com.zemoga.electricars.domain.model.Car
+import com.zemoga.electricars.domain.model.car.Car
 import com.zemoga.electricars.ui.spacing
 
 @Composable

@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.zemoga.electricars.domain.model.Car
+import com.zemoga.electricars.domain.model.car.Car
 
 @Composable
 fun CarItem(modifier: Modifier = Modifier, item: Car, onClick: (String) -> Unit = {}) {
