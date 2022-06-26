@@ -10,9 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import com.zemoga.electricars.domain.model.station.Station
 import com.zemoga.electricars.ui.spacing
 
@@ -29,8 +27,8 @@ fun StationItem(modifier: Modifier = Modifier, station: Station, onClick: (Strin
                 .fillMaxWidth()
                 .padding(MaterialTheme.spacing.medium)
         ) {
-            Text(text = station.name, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-            Text(text = station.address, fontSize = 16.sp)
+            Text(text = station.name, style = MaterialTheme.typography.h6)
+            Text(text = station.address, style = MaterialTheme.typography.body2)
             Row(modifier = Modifier.fillMaxWidth()) {
                 if (station.city.isNotEmpty()) {
                     Text(text = "${station.city}, ")

@@ -10,10 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.zemoga.electricars.domain.model.car.Car
+import com.zemoga.electricars.domain.model.car.CarImage
+import com.zemoga.electricars.domain.model.car.CarMedia
+import com.zemoga.electricars.domain.model.car.CarNaming
 
 @Composable
 fun CarItem(modifier: Modifier = Modifier, item: Car, onClick: (String) -> Unit = {}) {
@@ -52,4 +56,41 @@ fun CarItem(modifier: Modifier = Modifier, item: Car, onClick: (String) -> Unit 
         }
 
     }
+}
+
+@Preview
+@Composable
+fun CarItemPreview() {
+    CarItem(
+        item = Car(
+            id = "id",
+            naming = CarNaming(
+                make = "make",
+                model = "model",
+                version = "version",
+                edition = "edition",
+                chargeTripVersion = "chargeVersion"
+            ),
+            media = CarMedia(
+                image = CarImage(
+                    id = "id",
+                    url = "",
+                    height = 0,
+                    width = 0,
+                    thumbnailUrl = "",
+                    thumbnailHeight = 0,
+                    thumbnailWidth = 0
+                ),
+                brand = CarImage(
+                    id = "id",
+                    url = "",
+                    height = 0,
+                    width = 0,
+                    thumbnailUrl = "",
+                    thumbnailHeight = 0,
+                    thumbnailWidth = 0
+                )
+            )
+        )
+    )
 }

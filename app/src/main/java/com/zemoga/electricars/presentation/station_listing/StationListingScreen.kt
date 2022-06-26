@@ -11,12 +11,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.zemoga.electricars.ElectriCarScreens
 import com.zemoga.electricars.ui.spacing
 
 @Composable
 fun StationListingScreen(
     modifier: Modifier = Modifier,
-    viewModel: StationListingViewModel = hiltViewModel()
+    viewModel: StationListingViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val state = viewModel.stationListState
     if (state.isLoading) {
@@ -32,7 +35,10 @@ fun StationListingScreen(
                     modifier = Modifier.padding(
                         horizontal = MaterialTheme.spacing.medium,
                         vertical = MaterialTheme.spacing.small
-                    )
+                    ),
+                    onClick = { stationId ->
+                        navController.navigate("${ElectriCarScreens.STATION_DETAILS.name}/$stationId")
+                    }
                 )
             }
         }

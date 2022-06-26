@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.zemoga.electricars.presentation.car_details.CarDetailsScreen
 import com.zemoga.electricars.presentation.car_listing.CarListScreen
+import com.zemoga.electricars.presentation.station_details.StationDetailsScreen
 import com.zemoga.electricars.presentation.station_listing.StationListingScreen
 import com.zemoga.electricars.ui.theme.ElectriCarsTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,14 +66,16 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
             ElectriCarsBottomNavigation(selectedScreen = selectedScreen,
                 onClick = {
-                    when (it) {
-                        ElectriCarScreens.CAR_LISTING -> {
-                            navController.navigate("${ElectriCarScreens.CAR_LISTING}")
-                            selectedScreen = ElectriCarScreens.CAR_LISTING
-                        }
-                        ElectriCarScreens.STATION_LISTING -> {
-                            navController.navigate("${ElectriCarScreens.STATION_LISTING}")
-                            selectedScreen = ElectriCarScreens.STATION_LISTING
+                    if (navController.currentBackStackEntry?.destination?.route?.contains(it.name) == false){
+                        when (it) {
+                            ElectriCarScreens.CAR_LISTING -> {
+                                navController.navigate("${ElectriCarScreens.CAR_LISTING}")
+                                selectedScreen = ElectriCarScreens.CAR_LISTING
+                            }
+                            ElectriCarScreens.STATION_LISTING -> {
+                                navController.navigate("${ElectriCarScreens.STATION_LISTING}")
+                                selectedScreen = ElectriCarScreens.STATION_LISTING
+                            }
                         }
                     }
                 })
@@ -101,7 +104,16 @@ fun ElectriCarsNavHost(modifier: Modifier = Modifier, navController: NavHostCont
             CarDetailsScreen(carId = carId)
         }
         composable(route = ElectriCarScreens.STATION_LISTING.name) {
-            StationListingScreen()
+            StationListingScreen(navController = navController)
+        }
+        composable(
+            route = "${ElectriCarScreens.STATION_DETAILS.name}/{stationId}",
+            arguments = listOf(navArgument("stationId") {
+                type = NavType.StringType
+            })
+        ) { entry ->
+            val stationId = entry.arguments?.getString("stationId").orEmpty()
+            StationDetailsScreen(stationId = stationId)
         }
     }
 }
