@@ -1,8 +1,10 @@
 package com.zemoga.electricars.di
 
 import com.zemoga.electricars.data.repository.CarRepositoryImpl
+import com.zemoga.electricars.data.repository.ReviewRepositoryImpl
 import com.zemoga.electricars.data.repository.StationRepositoryImpl
 import com.zemoga.electricars.domain.repository.CarRepository
+import com.zemoga.electricars.domain.repository.ReviewRepository
 import com.zemoga.electricars.domain.repository.StationRepository
 import dagger.Binds
 import dagger.Module
@@ -25,4 +27,10 @@ abstract class RepositoryModule {
     abstract fun bindStationRepository(
         stationRepositoryImpl: StationRepositoryImpl
     ): StationRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindReviewRepository(
+        reviewRepositoryImpl: ReviewRepositoryImpl
+    ): ReviewRepository
 }

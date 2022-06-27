@@ -3,6 +3,7 @@ package com.zemoga.electricars.di
 import com.apollographql.apollo3.ApolloClient
 import com.zemoga.electricars.data.remote.interceptor.AuthorizationInterceptor
 import com.zemoga.electricars.data.remote.source.CarRemoteDataSource
+import com.zemoga.electricars.data.remote.source.ReviewRemoteDataSource
 import com.zemoga.electricars.data.remote.source.StationRemoteDataSource
 import dagger.Module
 import dagger.Provides
@@ -40,5 +41,11 @@ object DataModule {
     @Singleton
     fun providesStationRemoteDataSource(apolloClient: ApolloClient): StationRemoteDataSource {
         return StationRemoteDataSource(apolloClient)
+    }
+
+    @Provides
+    @Singleton
+    fun providesReviewRemoteDataSource(apolloClient: ApolloClient): ReviewRemoteDataSource {
+        return ReviewRemoteDataSource(apolloClient)
     }
 }

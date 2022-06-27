@@ -45,6 +45,10 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(modifier: Modifier = Modifier) {
     var showNavigationIcon by remember { mutableStateOf(false) }
     val navController = rememberNavController()
+    var selectedScreen by rememberSaveable {
+        mutableStateOf(ElectriCarScreens.CAR_LISTING)
+    }
+
     navController.addOnDestinationChangedListener { controller, _, _ ->
         showNavigationIcon = controller.previousBackStackEntry != null
     }
@@ -60,10 +64,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
             )
         },
         bottomBar = {
-            var selectedScreen by rememberSaveable {
-                mutableStateOf(ElectriCarScreens.CAR_LISTING)
-            }
-
             ElectriCarsBottomNavigation(selectedScreen = selectedScreen,
                 onClick = {
                     if (navController.currentBackStackEntry?.destination?.route?.contains(it.name) == false){

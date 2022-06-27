@@ -1,11 +1,9 @@
 package com.zemoga.electricars.di
 
 import com.zemoga.electricars.domain.repository.CarRepository
+import com.zemoga.electricars.domain.repository.ReviewRepository
 import com.zemoga.electricars.domain.repository.StationRepository
-import com.zemoga.electricars.domain.usecase.CarListingUseCase
-import com.zemoga.electricars.domain.usecase.CarUseCase
-import com.zemoga.electricars.domain.usecase.StationListingUseCase
-import com.zemoga.electricars.domain.usecase.StationUseCase
+import com.zemoga.electricars.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,5 +36,11 @@ object DomainModule {
     @Singleton
     fun providesStationUseCase(stationRepository: StationRepository): StationUseCase {
         return StationUseCase(stationRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesReviewsUseCase(reviewRepository: ReviewRepository): ReviewsUseCase {
+        return ReviewsUseCase(reviewRepository)
     }
 }

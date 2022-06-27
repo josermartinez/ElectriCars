@@ -13,4 +13,7 @@
     <string name="station_details_station_name_label">Name: </string>
     <string name="station_details_station_address_label">Address: </string>
     <string name="station_details_station_opening_times_label">Opening times: </string>
+
+    <string name="reviews_section_title">Station reviews</string>
+    <string name="reviews_section_rating_label">Rating: </string>
 </resources>
