@@ -7,4 +7,10 @@ import kotlinx.coroutines.flow.Flow
 interface ReviewRepository {
 
     suspend fun getReviews(stationId: String): Flow<Resource<List<Review>>>
+
+    suspend fun addReview(
+        stationId: String,
+        rating: Int,
+        message: String = ""
+    ): Flow<Resource<Review>>
 }

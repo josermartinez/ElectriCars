@@ -1,15 +1,15 @@
 package com.zemoga.electricars.presentation.station_details
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,19 +21,67 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import com.zemoga.electricars.R
-import com.zemoga.electricars.domain.model.review.Review
 import com.zemoga.electricars.domain.model.station.Station
+import com.zemoga.electricars.presentation.common.RatingBar
+import com.zemoga.electricars.presentation.review.ReviewBottomSheet
+import com.zemoga.electricars.presentation.review.ReviewsSection
 import com.zemoga.electricars.ui.spacing
 import com.zemoga.electricars.util.orZero
+import kotlinx.coroutines.launch
 import java.util.*
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun StationDetailsScreen(
     modifier: Modifier = Modifier,
     stationId: String = "",
-    viewModel: ScreenDetailsViewModel = hiltViewModel(),
+    viewModel: ScreenDetailsViewModel = hiltViewModel()
 ) {
-    val state = viewModel.state
+    val sheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy)
+    )
+    val coroutineScope = rememberCoroutineScope()
+
+    // I tried to use BottomSheetScaffold but the Floating Button was going up with the bottom sheet
+    ModalBottomSheetLayout(
+        modifier = modifier,
+        sheetState = sheetState,
+        sheetShape = MaterialTheme.shapes.medium.copy(
+            topStart = CornerSize(16.dp),
+            topEnd = CornerSize(16.dp)
+        ),
+        sheetContent = {
+            ReviewBottomSheet(stationId = stationId, onReviewAdded = {
+                coroutineScope.launch {
+                    sheetState.animateTo(ModalBottomSheetValue.Hidden)
+                    viewModel.refresh()
+                }
+            })
+        },
+    ) {
+        Scaffold(
+            floatingActionButton = {
+                ReviewFloatingActionButton(onClick = {
+                    coroutineScope.launch {
+                        sheetState.animateTo(ModalBottomSheetValue.Expanded)
+                    }
+                })
+            }
+        ) { paddingValues ->
+            StationDetailsScreenContent(
+                modifier = modifier.padding(paddingValues),
+                state = viewModel.state
+            )
+        }
+    }
+}
+
+@Composable
+fun StationDetailsScreenContent(
+    modifier: Modifier = Modifier,
+    state: StationDetailState = StationDetailState()
+) {
     if (state.isLoading) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -64,18 +112,27 @@ fun StationDetailsScreen(
                     title = state.station?.name.orEmpty()
                 )
             }
-            StationDetailItem(
+
+            LazyColumn(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .offset(y = -MaterialTheme.spacing.large)
-                    .padding(MaterialTheme.spacing.medium),
-                station = state.station
-            )
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-            if (state.reviews.isNullOrEmpty().not()) {
-                ReviewsSection(
-                    modifier = Modifier.padding(MaterialTheme.spacing.medium),
-                    reviews = state.reviews
-                )
+            ) {
+                item {
+                    StationDetailItem(
+                        modifier = Modifier
+                            .padding(MaterialTheme.spacing.medium),
+                        station = state.station
+                    )
+                }
+                if (state.reviews.isNullOrEmpty().not()) {
+                    item {
+                        ReviewsSection(
+                            modifier = Modifier.padding(MaterialTheme.spacing.medium),
+                            reviews = state.reviews
+                        )
+                    }
+                }
             }
         }
     }
@@ -187,85 +244,10 @@ fun OpeningTimeItem(
 }
 
 @Composable
-fun ReviewsSection(modifier: Modifier = Modifier, reviews: List<Review>? = emptyList()) {
-    Card(
-        modifier = modifier,
-        shape = MaterialTheme.shapes.medium.copy(all = CornerSize(16.dp))
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(MaterialTheme.spacing.medium)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.reviews_section_title),
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.weight(1f)
-                )
-                IconButton(onClick = { }) {
-                    Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null)
-                }
-            }
-            Divider(modifier = Modifier.fillMaxWidth())
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-            Column(modifier = Modifier.fillMaxWidth()) {
-                reviews?.forEach { review ->
-                    ReviewItemList(review = review)
-                }
-            }
-        }
+fun ReviewFloatingActionButton(onClick: () -> Unit = {}) {
+    FloatingActionButton(onClick = onClick) {
+        Icon(imageVector = Icons.Default.Add, contentDescription = null)
     }
-}
-
-@Composable
-fun ReviewItemList(modifier: Modifier = Modifier, review: Review = Review()) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = review.message,
-            style = MaterialTheme.typography.body2,
-            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small)
-        )
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = stringResource(id = R.string.reviews_section_rating_label),
-                style = MaterialTheme.typography.body2,
-                modifier = Modifier.padding(
-                    horizontal = MaterialTheme.spacing.small
-                )
-            )
-            RatingBar(rating = review.rating)
-        }
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-        Divider(modifier = Modifier.fillMaxWidth())
-    }
-}
-
-@Composable
-fun RatingBar(modifier: Modifier = Modifier, rating: Int) {
-    Row(modifier = modifier) {
-        for (i in 0..rating) {
-            Icon(imageVector = Icons.Filled.Star, contentDescription = null, tint = Color.Yellow)
-            Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
-        }
-    }
-}
-
-@Preview
-@Composable
-fun RatingBarReview() {
-    RatingBar(rating = 4)
-}
-
-
-@Preview
-@Composable
-fun ReviewsSectionPreview() {
-    ReviewsSection(reviews = listOf(Review(message = "This is a station review", rating = 4)))
 }
 
 @Preview

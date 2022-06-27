@@ -1,0 +1,13 @@
+mutation AddReviewMutation($stationId: String!, $rating: Int!, $message: String){
+    addReview(
+        review: {
+            stationId: $stationId,
+            rating: $rating,
+            message: $message
+        }
+    ) {
+        id
+        message
+        rating
+    }
+}

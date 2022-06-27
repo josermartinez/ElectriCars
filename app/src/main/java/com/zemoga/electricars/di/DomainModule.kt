@@ -43,4 +43,10 @@ object DomainModule {
     fun providesReviewsUseCase(reviewRepository: ReviewRepository): ReviewsUseCase {
         return ReviewsUseCase(reviewRepository)
     }
+
+    @Provides
+    @Singleton
+    fun providesAddReviewUseCase(reviewRepository: ReviewRepository): AddReviewUseCase {
+        return AddReviewUseCase(reviewRepository)
+    }
 }

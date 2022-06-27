@@ -16,4 +16,8 @@
 
     <string name="reviews_section_title">Station reviews</string>
     <string name="reviews_section_rating_label">Rating: </string>
+    <string name="reviews_section_add_review_label">Add review</string>
+    <string name="reviews_section_add_review_button_label">Add review</string>
+    <string name="reviews_section_add_review_placeholder_hint">Add your review</string>
+    <string name="reviews_section_add_review_rating_hint">Select a rating</string>
 </resources>

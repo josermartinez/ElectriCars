@@ -23,25 +23,30 @@ class ScreenDetailsViewModel @Inject constructor(
     var state by mutableStateOf(StationDetailState())
         private set
 
+    private val stationId = savedStateHandle.get<String>("stationId").orEmpty()
+
     init {
-        getStationInfo()
+        refresh()
     }
 
-    private fun getStationInfo() {
-        val stationId = savedStateHandle.get<String>("stationId").orEmpty()
+    fun refresh() {
         viewModelScope.launch {
-            stationUseCase.invoke(stationId).collect {
-                when (it) {
-                    is Resource.Loading -> {
-                        state = state.copy(isLoading = true)
-                    }
-                    is Resource.Success -> {
-                        state = state.copy(isLoading = false, station = it.data)
-                        getStationReviews(stationId)
-                    }
-                    is Resource.Error -> {
-                        state = state.copy(isLoading = false, errorMessage = it.message.orEmpty())
-                    }
+            getStationInfo()
+        }
+    }
+
+    private suspend fun getStationInfo() {
+        stationUseCase.invoke(stationId).collect {
+            when (it) {
+                is Resource.Loading -> {
+                    state = state.copy(isLoading = true)
+                }
+                is Resource.Success -> {
+                    state = state.copy(isLoading = false, station = it.data)
+                    getStationReviews(stationId)
+                }
+                is Resource.Error -> {
+                    state = state.copy(isLoading = false, errorMessage = it.message.orEmpty())
                 }
             }
         }

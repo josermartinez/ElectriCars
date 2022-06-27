@@ -30,4 +30,24 @@ class ReviewRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun addReview(
+        stationId: String,
+        rating: Int,
+        message: String
+    ): Flow<Resource<Review>> {
+        return flow {
+            emit(Resource.Loading())
+            val response = reviewRemoteDataSource.addReview(stationId, rating, message)
+            val errors = response.errors
+            if (errors.isNullOrEmpty().not()) {
+                emit(Resource.Error(message = errors?.first()?.message.orEmpty()))
+            } else {
+                response.data?.let { data ->
+                    val review = data.addReview.toReview()
+                    emit(Resource.Success(data = review))
+                } ?: emit(Resource.Error(message = ""))
+            }
+        }
+    }
 }
