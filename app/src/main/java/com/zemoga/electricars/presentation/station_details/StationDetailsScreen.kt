@@ -1,6 +1,7 @@
 package com.zemoga.electricars.presentation.station_details
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
@@ -73,7 +74,10 @@ fun StationDetailsScreen(
 
 @Composable
 fun StationDetailItem(modifier: Modifier = Modifier, station: Station? = null) {
-    Card(modifier = modifier.fillMaxWidth(), shape = MaterialTheme.shapes.medium) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.medium.copy(all = CornerSize(16.dp))
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
