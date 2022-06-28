@@ -20,4 +20,5 @@
     <string name="reviews_section_add_review_button_label">Add review</string>
     <string name="reviews_section_add_review_placeholder_hint">Add your review</string>
     <string name="reviews_section_add_review_rating_hint">Select a rating</string>
+    <string name="reviews_section_review_added_success_message">Review Added</string>
 </resources>

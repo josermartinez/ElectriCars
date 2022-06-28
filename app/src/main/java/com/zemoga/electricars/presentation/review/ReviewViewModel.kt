@@ -45,7 +45,9 @@ class ReviewViewModel @Inject constructor(
                             reviewState.copy(
                                 isLoading = false,
                                 review = it.data,
-                                reviewAdded = true
+                                reviewAdded = true,
+                                message = "",
+                                rating = 0
                             )
                         }
                     }

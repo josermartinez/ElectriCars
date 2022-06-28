@@ -1,5 +1,6 @@
 package com.zemoga.electricars.presentation.review
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,8 +51,6 @@ fun ReviewBottomSheet(
             ) {
                 CircularProgressIndicator()
             }
-        } else if (state.reviewAdded) {
-            onReviewAdded()
         } else {
             Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))
             Text(
@@ -90,6 +90,14 @@ fun ReviewBottomSheet(
                     Text(text = stringResource(id = R.string.reviews_section_add_review_button_label))
                 }
             }
+        }
+
+        if (state.reviewAdded) {
+            Toast.makeText(
+                LocalContext.current,
+                stringResource(id = R.string.reviews_section_review_added_success_message),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 }
