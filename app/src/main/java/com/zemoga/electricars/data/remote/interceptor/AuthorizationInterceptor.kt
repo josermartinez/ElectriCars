@@ -12,8 +12,8 @@ class AuthorizationInterceptor : HttpInterceptor {
         chain: HttpInterceptorChain
     ): HttpResponse {
         val requestBuild = request.newBuilder()
-            .addHeader("x-client-id", "62ae49dab0d2b6c85e3ac2e3")
-            .addHeader("x-app-id", "62ae49dab0d2b6c85e3ac2e5")
+            .addHeader("x-client-id", "62ba4e6db0d2b6c85e3b9a46")
+            .addHeader("x-app-id", "62ba4e6db0d2b6c85e3b9a48")
             .build()
         return chain.proceed(requestBuild)
     }

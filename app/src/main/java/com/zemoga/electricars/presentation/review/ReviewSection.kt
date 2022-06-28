@@ -1,13 +1,18 @@
 package com.zemoga.electricars.presentation.review
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,6 +23,17 @@ import com.zemoga.electricars.ui.spacing
 
 @Composable
 fun ReviewsSection(modifier: Modifier = Modifier, reviews: List<Review>? = emptyList()) {
+    var reviewListShown by remember { mutableStateOf(false) }
+    var rotationValue by remember {
+        mutableStateOf(0f)
+    }
+    val angle: Float by animateFloatAsState(
+        targetValue = rotationValue,
+        animationSpec = tween(
+            durationMillis = 300,
+            easing = LinearEasing
+        )
+    )
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium.copy(all = CornerSize(16.dp))
@@ -36,15 +52,27 @@ fun ReviewsSection(modifier: Modifier = Modifier, reviews: List<Review>? = empty
                     style = MaterialTheme.typography.h6,
                     modifier = Modifier.weight(1f)
                 )
-                IconButton(onClick = { }) {
-                    Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null)
+                IconButton(
+                    onClick = {
+                        rotationValue = if (rotationValue == 0f) 180f else 0f
+                        reviewListShown = !reviewListShown
+                    }) {
+                    Icon(
+                        modifier = Modifier.rotate(angle),
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = null
+                    )
                 }
             }
             Divider(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-            Column(modifier = Modifier.fillMaxWidth()) {
-                reviews?.forEach { review ->
-                    ReviewItemList(review = review)
+            AnimatedVisibility(
+                visible = reviewListShown
+            ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    reviews?.forEach { review ->
+                        ReviewItemList(review = review)
+                    }
                 }
             }
         }

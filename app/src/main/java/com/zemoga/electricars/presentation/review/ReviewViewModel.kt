@@ -29,12 +29,16 @@ class ReviewViewModel @Inject constructor(
                 .collect {
                     reviewState = when (it) {
                         is Resource.Loading -> {
-                            reviewState.copy(isLoading = true)
+                            reviewState.copy(
+                                isLoading = true,
+                                reviewAdded = false
+                            )
                         }
                         is Resource.Error -> {
                             reviewState.copy(
                                 errorMessage = it.message.orEmpty(),
-                                isLoading = false
+                                isLoading = false,
+                                reviewAdded = false
                             )
                         }
                         is Resource.Success -> {

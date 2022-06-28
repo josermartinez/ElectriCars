@@ -27,26 +27,31 @@ fun ReviewBottomSheet(
     var selectedOption by rememberSaveable {
         mutableStateOf("1")
     }
-    if (state.isLoading) {
-        Box(
-            modifier = Modifier.defaultMinSize(minHeight = 300.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
-    } else {
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .defaultMinSize(minHeight = 300.dp)
-                .padding(MaterialTheme.spacing.medium),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Divider(
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 300.dp)
+            .padding(MaterialTheme.spacing.medium),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Divider(
+            modifier = Modifier
+                .width(20.dp)
+                .height(4.dp)
+        )
+
+        if (state.isLoading) {
+            Box(
                 modifier = Modifier
-                    .width(20.dp)
-                    .height(4.dp)
-            )
+                    .defaultMinSize(minHeight = 300.dp)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else if (state.reviewAdded) {
+            onReviewAdded()
+        } else {
             Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))
             Text(
                 text = stringResource(id = R.string.reviews_section_add_review_label),
@@ -85,11 +90,6 @@ fun ReviewBottomSheet(
                     Text(text = stringResource(id = R.string.reviews_section_add_review_button_label))
                 }
             }
-
         }
-    }
-
-    if (state.reviewAdded) {
-        onReviewAdded()
     }
 }

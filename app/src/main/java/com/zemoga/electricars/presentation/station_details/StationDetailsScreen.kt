@@ -8,11 +8,9 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,7 +20,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import com.zemoga.electricars.R
 import com.zemoga.electricars.domain.model.station.Station
-import com.zemoga.electricars.presentation.common.RatingBar
 import com.zemoga.electricars.presentation.review.ReviewBottomSheet
 import com.zemoga.electricars.presentation.review.ReviewsSection
 import com.zemoga.electricars.ui.spacing
@@ -34,8 +31,7 @@ import java.util.*
 @Composable
 fun StationDetailsScreen(
     modifier: Modifier = Modifier,
-    stationId: String = "",
-    viewModel: ScreenDetailsViewModel = hiltViewModel()
+    stationId: String = ""
 ) {
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
@@ -52,12 +48,13 @@ fun StationDetailsScreen(
             topEnd = CornerSize(16.dp)
         ),
         sheetContent = {
-            ReviewBottomSheet(stationId = stationId, onReviewAdded = {
-                coroutineScope.launch {
-                    sheetState.animateTo(ModalBottomSheetValue.Hidden)
-                    viewModel.refresh()
-                }
-            })
+            ReviewBottomSheet(
+                stationId = stationId,
+                onReviewAdded = {
+                    coroutineScope.launch {
+                        sheetState.hide()
+                    }
+                })
         },
     ) {
         Scaffold(
@@ -70,8 +67,7 @@ fun StationDetailsScreen(
             }
         ) { paddingValues ->
             StationDetailsScreenContent(
-                modifier = modifier.padding(paddingValues),
-                state = viewModel.state
+                modifier = modifier.padding(paddingValues)
             )
         }
     }
@@ -80,8 +76,9 @@ fun StationDetailsScreen(
 @Composable
 fun StationDetailsScreenContent(
     modifier: Modifier = Modifier,
-    state: StationDetailState = StationDetailState()
+    viewModel: ScreenDetailsViewModel = hiltViewModel()
 ) {
+    val state = viewModel.state
     if (state.isLoading) {
         Box(
             modifier = Modifier.fillMaxSize(),
