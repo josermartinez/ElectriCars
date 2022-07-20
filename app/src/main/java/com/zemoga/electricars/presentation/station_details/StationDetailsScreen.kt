@@ -8,22 +8,19 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.*
 import com.zemoga.electricars.R
 import com.zemoga.electricars.domain.model.station.Station
 import com.zemoga.electricars.presentation.review.ReviewBottomSheet
 import com.zemoga.electricars.presentation.review.ReviewsSection
 import com.zemoga.electricars.ui.spacing
-import com.zemoga.electricars.util.orZero
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -87,48 +84,23 @@ fun StationDetailsScreenContent(
             CircularProgressIndicator()
         }
     } else {
-        val stationCoordinates = LatLng(
-            state.station?.coordinates?.latitude?.toDouble().orZero(),
-            state.station?.coordinates?.longitude?.toDouble().orZero()
-        )
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(stationCoordinates, 5f)
-        }
-        val mapUiSettings by remember {
-            mutableStateOf(MapUiSettings(zoomControlsEnabled = false))
-        }
-
-        Column(modifier = modifier) {
-            GoogleMap(
-                modifier = Modifier.height(200.dp),
-                cameraPositionState = cameraPositionState,
-                uiSettings = mapUiSettings
-            ) {
-                Marker(
-                    state = MarkerState(position = stationCoordinates),
-                    title = state.station?.name.orEmpty()
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            item {
+                StationDetailItem(
+                    modifier = Modifier
+                        .padding(MaterialTheme.spacing.medium),
+                    station = state.station
                 )
             }
-
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = -MaterialTheme.spacing.large)
-            ) {
+            if (state.reviews.isNullOrEmpty().not()) {
                 item {
-                    StationDetailItem(
-                        modifier = Modifier
-                            .padding(MaterialTheme.spacing.medium),
-                        station = state.station
+                    ReviewsSection(
+                        modifier = Modifier.padding(MaterialTheme.spacing.medium),
+                        reviews = state.reviews
                     )
-                }
-                if (state.reviews.isNullOrEmpty().not()) {
-                    item {
-                        ReviewsSection(
-                            modifier = Modifier.padding(MaterialTheme.spacing.medium),
-                            reviews = state.reviews
-                        )
-                    }
                 }
             }
         }
