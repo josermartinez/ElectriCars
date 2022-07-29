@@ -61,6 +61,7 @@ class ScreenDetailsViewModel @Inject constructor(
                 is Resource.Error -> {
                     state = state.copy(errorMessage = it.message.orEmpty())
                 }
+                else -> {}
             }
         }
     }

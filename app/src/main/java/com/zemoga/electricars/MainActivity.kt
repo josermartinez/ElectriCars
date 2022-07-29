@@ -76,6 +76,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                                 navController.navigate("${ElectriCarScreens.STATION_LISTING}")
                                 selectedScreen = ElectriCarScreens.STATION_LISTING
                             }
+                            else -> {}
                         }
                     }
                 })
